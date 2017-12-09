@@ -21,24 +21,24 @@ public class User extends Thread
 		itsLocationProcessor.requestLocation(numer);
 	}
 	
-//	public void run()
-//	{
-//		while (true)
-//		{
-//			System.out.println("Abonent o numerze " + numer + " sprawdza swoj¹ lokalizacjê");
-//			itsLocationProcessor.requestLocation(numer);
-//			try
-//			{
-//				Thread.sleep(20000);
-//			}
-//			catch (IllegalArgumentException e)
-//			{
-//				System.out.println("IllegalArgumentException" + e.getMessage());
-//			}
-//			catch (InterruptedException e)
-//			{
-//				System.out.println("InterruptedException" + e.getMessage());
-//			}
-//		}
-//	}
+	public void run()
+	{
+		while (true)
+		{
+			System.out.println("Abonent o numerze " + numer + " sprawdza swoj¹ lokalizacjê");
+			itsLocationProcessor.requestLocation(numer);
+			try
+			{
+				Thread.sleep(20000);
+			}
+			catch (IllegalArgumentException e)
+			{
+				System.out.println("IllegalArgumentException" + e.getMessage());
+			}
+			catch (InterruptedException e)
+			{
+				System.out.println("InterruptedException" + e.getMessage());
+			}
+		}
+	}
 }

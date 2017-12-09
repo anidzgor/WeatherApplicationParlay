@@ -161,17 +161,24 @@ public class Feature{
 			service.addUser(user);
 			System.out.println("Dodano u¿ytkownika o numerze: " + user.getNumer());
 			itsSMSProcessor.sendSMS(Configuration.INSTANCE.getProperty("serviceNumber"), aSender, "Jestes nowym uzytkownikiem serwisu");
-			user.checkLocalization();
 		} else if(aMessageContent.toLowerCase().equals("rejestracja") && user != null) {
 			itsSMSProcessor.sendSMS(Configuration.INSTANCE.getProperty("serviceNumber"), aSender, "Nie musisz sie rejestrowac, jestes juz czlonkiem serwisu");
 		}
 		
 		//Sprawdzenie pogody przez u¿ytkownika zarejestrowanego w serwisie
 		if (aMessageContent.toLowerCase().equals("pogoda") && user != null ) {
-			user.checkLocalization();
-			
+			user.checkLocalization();			
 		}
+	
+		//Zapisanie sie do subskrypcji pogodowej
+		if (aMessageContent.toLowerCase().equals("subskrypcja") && user != null ) {
+			user.start();			
+		}		
 		
+		//Zapisanie sie do subskrypcji pogodowej
+		if (aMessageContent.toLowerCase().equals("odsubskrybuj") && user != null ) {
+			user.stop();			
+		}	
 	}
 
 	private User checkList(String numer)
@@ -219,6 +226,20 @@ public class Feature{
 			messageContent.addMedia(plotter.createDataSource());
 			itsMMSProcessor.sendMMS(Configuration.INSTANCE.getProperty("serviceNumber"), user, messageContent
 					.getBinaryContent(), "Current location");
+
+			if(latitude < 0.5 && longitude < 0.5) {
+				System.out.println("S³onecznie");
+			}
+			else if(latitude >= 0.5 && longitude < 0.5) {
+				System.out.println("Pada");
+			}
+			else if(latitude < 0.5 && longitude >= 0.5) {
+				System.out.println("Burza");
+			}
+			else if(latitude >= 0.5 && longitude >= 0.5) {
+				System.out.println("Œnieg");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -236,6 +257,8 @@ public class Feature{
 		
 		s += "\"rejestracja\" pozwala uzytkownikowi na zarejestrowanie sie w serwisie pogodowym \n";
 		s += "\"pogoda\" pozwala uzytkownikowi na sprawdzenie w swoim rejonie pogody \n";
+		s += "\"subskrypcja\" pozwala uzytkownikowi na subskrypcje pogody \n";
+		s += "\"odsubskrybuj\" pozwala uzytkownikowi na zrezygnowanie z dostawania powiadomieñ o pogodzie \n";
 
 		s += "\n-------------------------------------------\n";
 		s += "Nacisnij STOP, aby zatrzymac aplikacje.\n";
